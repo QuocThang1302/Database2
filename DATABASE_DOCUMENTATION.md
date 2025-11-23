@@ -575,33 +575,93 @@ LIMIT 5;
 
 ## 🚀 HƯỚNG DẪN SỬ DỤNG
 
-### Bước 1: Tạo Database
+### Bước 1: Cài đặt PostgreSQL
+
+#### Trên Windows:
+
+1. Tải PostgreSQL từ: https://www.postgresql.org/download/windows/
+2. Chạy file cài đặt và làm theo hướng dẫn
+3. Ghi nhớ mật khẩu cho user `postgres`
+4. Thêm PostgreSQL vào PATH (thường là `C:\Program Files\PostgreSQL\<version>\bin`)
+
+#### Trên Linux/Mac:
 
 ```bash
-# Sử dụng psql để chạy script
+# Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
+
+# Mac (sử dụng Homebrew)
+brew install postgresql
+```
+
+### Bước 2: Tạo Database
+
+#### Cách 1: Sử dụng psql trực tiếp
+
+```bash
+# Chạy script từ file
 psql -U postgres -f create_database_postgresql.sql
 ```
 
-Hoặc:
+#### Cách 2: Đăng nhập vào PostgreSQL và chạy script
 
 ```bash
-# Đăng nhập vào PostgreSQL và chạy script
+# Đăng nhập vào PostgreSQL
 psql -U postgres
+
+# Sau khi đăng nhập, chạy script
 \i create_database_postgresql.sql
+
+# Hoặc nếu file ở thư mục khác
+\i 'D:/OOAD/Database2/create_database_postgresql.sql'
 ```
 
-### Bước 2: Kết nối đến database và kiểm tra cấu trúc
+#### Cách 3: Sử dụng pgAdmin (Giao diện đồ họa)
+
+1. Mở pgAdmin
+2. Kết nối đến PostgreSQL server
+3. Right-click trên Databases → Create → Database
+4. Đặt tên: `busticketsystem`
+5. Right-click database vừa tạo → Query Tool
+6. Mở file `create_database_postgresql.sql` và Execute
+
+### Bước 3: Kết nối và kiểm tra cấu trúc
+
+```bash
+# Kết nối đến database
+psql -U postgres -d busticketsystem
+```
+
+Sau khi kết nối, chạy các lệnh sau:
 
 ```sql
--- Kết nối đến database
-\c busticketsystem;
-
 -- Xem danh sách bảng
 \dt
+
+-- Xem tất cả schema objects
+\d
 
 -- Xem chi tiết cấu trúc bảng
 \d+ users
 \d+ trips
+\d+ bookings
+
+-- Xem các views
+\dv
+
+-- Xem các functions và procedures
+\df
+
+-- Xem các triggers
+\dy
+
+-- Kiểm tra số lượng bản ghi trong các bảng mẫu
+SELECT 'Roles' AS table_name, COUNT(*) AS record_count FROM Roles
+UNION ALL
+SELECT 'VehicleTypes', COUNT(*) FROM VehicleTypes
+UNION ALL
+SELECT 'Users', COUNT(*) FROM Users;
 ```
 
 ### Bước 3: Thêm dữ liệu mẫu
