@@ -1,4 +1,5 @@
 # TÀI LIỆU MÔ TẢ CẤU TRÚC DATABASE
+
 ## Hệ Thống Quản Lý Bán Vé Xe Khách
 
 ---
@@ -6,6 +7,7 @@
 ## 📋 TỔNG QUAN
 
 Database được thiết kế cho hệ thống quản lý bán vé xe khách với đầy đủ các chức năng:
+
 - Quản lý người dùng và phân quyền
 - Quản lý xe, tài xế, lộ trình
 - Đặt vé online và tại quầy
@@ -20,6 +22,7 @@ Database được thiết kế cho hệ thống quản lý bán vé xe khách v�
 ### 1. NHÓM BẢNG NGƯỜI DÙNG VÀ TÀI KHOẢN
 
 #### 1.1. Bảng `Roles` - Vai trò
+
 ```
 RoleID (PK)           - ID vai trò
 RoleName              - Tên vai trò (Admin, Nhân viên, Tài xế, Khách hàng)
@@ -28,10 +31,12 @@ CreatedAt             - Thời gian tạo
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Mỗi người dùng chỉ có 1 vai trò duy nhất (QĐ4)
 - Có 4 vai trò chính: Admin, Nhân viên bán vé, Tài xế, Khách hàng
 
 #### 1.2. Bảng `Users` - Người dùng
+
 ```
 UserID (PK)           - ID người dùng
 FullName              - Họ và tên
@@ -47,6 +52,7 @@ UpdatedAt             - Thời gian cập nhật
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Email và SĐT không được trùng (QĐ2)
 - Mật khẩu tối thiểu 6 ký tự, có ít nhất 1 chữ số (QĐ2)
 - Tài khoản mới mặc định là vai trò "Khách hàng" (QĐ2)
@@ -58,6 +64,7 @@ UpdatedAt             - Thời gian cập nhật
 ### 2. NHÓM BẢNG QUẢN LÝ XE VÀ TÀI XẾ
 
 #### 2.1. Bảng `VehicleTypes` - Loại xe
+
 ```
 TypeID (PK)           - ID loại xe
 TypeName (UNIQUE)     - Tên loại xe (Limousine, Giường nằm, Ghế ngồi)
@@ -67,6 +74,7 @@ CreatedAt             - Thời gian tạo
 ```
 
 #### 2.2. Bảng `Vehicles` - Xe
+
 ```
 VehicleID (PK)        - ID xe
 LicensePlate (UNIQUE) - Biển kiểm soát (duy nhất)
@@ -79,11 +87,13 @@ UpdatedAt             - Thời gian cập nhật
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Biển kiểm soát là duy nhất (QĐ7)
 - Xe có 3 trạng thái: Hoàn thiện, Hư hại, Phế liệu (QĐ7)
 - Loại xe quy định số ghế và sơ đồ ghế
 
 #### 2.3. Bảng `Drivers` - Tài xế
+
 ```
 DriverID (PK)         - ID tài xế
 UserID (FK, UNIQUE)   - Liên kết với Users
@@ -97,6 +107,7 @@ UpdatedAt             - Thời gian cập nhật
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Lịch chạy là danh sách chuyến xe tài xế chạy (QĐ8)
 - Tài xế làm việc tối đa 10 giờ/ngày, tối đa 4 tiếng liên tục
 
@@ -105,6 +116,7 @@ UpdatedAt             - Thời gian cập nhật
 ### 3. NHÓM BẢNG QUẢN LÝ TUYẾN ĐƯỜNG
 
 #### 3.1. Bảng `Locations` - Địa điểm
+
 ```
 LocationID (PK)       - ID địa điểm
 LocationName          - Tên địa điểm
@@ -116,6 +128,7 @@ CreatedAt             - Thời gian tạo
 ```
 
 #### 3.2. Bảng `Routes` - Lộ trình
+
 ```
 RouteID (PK)          - ID lộ trình
 RouteName             - Tên lộ trình
@@ -129,11 +142,13 @@ UpdatedAt             - Thời gian cập nhật
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Chỉ Admin được tạo, sửa, xóa lộ trình (QĐ5)
 - Lộ trình có 3 trạng thái: Hoạt động, Bảo trì, Dừng (QĐ5)
 - Chỉ lộ trình "Hoạt động" mới dùng để lập lịch chuyến
 
 #### 3.3. Bảng `RouteStops` - Điểm dừng trên lộ trình
+
 ```
 StopID (PK)           - ID điểm dừng
 RouteID (FK)          - Lộ trình
@@ -145,6 +160,7 @@ EstimatedTime         - Thời gian dự kiến (phút)
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Danh sách điểm phải theo đúng thứ tự thực tế (QĐ5)
 
 ---
@@ -152,6 +168,7 @@ EstimatedTime         - Thời gian dự kiến (phút)
 ### 4. NHÓM BẢNG QUẢN LÝ CHUYẾN XE
 
 #### 4.1. Bảng `Trips` - Chuyến xe
+
 ```
 TripID (PK)           - ID chuyến xe
 RouteID (FK)          - Lộ trình
@@ -168,12 +185,14 @@ UpdatedAt             - Thời gian cập nhật
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Chỉ Admin được tạo, sửa, xóa chuyến xe (QĐ6)
 - Xe/Tài xế không được trùng lịch
 - Trạng thái hợp lệ: Chờ, Đang chạy, Hoàn thành, Hủy, Trễ (QĐ20)
 - Mọi thay đổi trạng thái phải ghi log (QĐ20)
 
 #### 4.2. Bảng `TripSeats` - Sơ đồ ghế chuyến xe
+
 ```
 SeatID (PK)           - ID ghế
 TripID (FK)           - Chuyến xe
@@ -185,6 +204,7 @@ CreatedAt             - Thời gian tạo
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Danh sách ghế thuộc về xe của chuyến đó (QĐ6)
 - Chỉ cho phép chọn ghế "Trống" (QĐ10)
 - Ghế được giữ trong 10 phút (QĐ18)
@@ -195,6 +215,7 @@ CreatedAt             - Thời gian tạo
 ### 5. NHÓM BẢNG ĐẶT VÉ VÀ THANH TOÁN
 
 #### 5.1. Bảng `Bookings` - Đặt vé
+
 ```
 BookingID (PK)        - ID đặt vé
 BookingCode (UNIQUE)  - Mã đặt vé (tự động)
@@ -212,6 +233,7 @@ UpdatedAt             - Thời gian cập nhật
 ```
 
 #### 5.2. Bảng `Tickets` - Vé
+
 ```
 TicketID (PK)         - ID vé
 TicketCode (UNIQUE)   - Mã vé (tự động)
@@ -225,10 +247,12 @@ CreatedAt             - Thời gian tạo
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Vé chỉ được in khi đã thanh toán thành công (QĐ12)
 - Sau khi in, cập nhật trạng thái "Đã xác nhận" và lưu nhân viên thực hiện (QĐ12)
 
 #### 5.3. Bảng `Payments` - Thanh toán
+
 ```
 PaymentID (PK)        - ID thanh toán
 BookingID (FK)        - Đơn đặt vé
@@ -243,9 +267,11 @@ CreatedAt             - Thời gian tạo
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Chỉ xác nhận vé thành công khi nhận mã thành công từ cổng thanh toán (QĐ11)
 
 #### 5.4. Bảng `Refunds` - Hoàn tiền
+
 ```
 RefundID (PK)         - ID hoàn tiền
 BookingID (FK)        - Đơn đặt vé
@@ -260,6 +286,7 @@ CreatedAt             - Thời gian tạo
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Vé chỉ được hủy trước giờ khởi hành tối thiểu 2 giờ (QĐ13)
 - Hoàn 90% nếu hủy trước 4 giờ, 50% nếu 2-4 giờ
 
@@ -268,6 +295,7 @@ CreatedAt             - Thời gian tạo
 ### 6. NHÓM BẢNG ĐÁNH GIÁ VÀ PHẢN HỒI
 
 #### 6.1. Bảng `Reviews` - Đánh giá
+
 ```
 ReviewID (PK)         - ID đánh giá
 TripID (FK)           - Chuyến xe
@@ -279,6 +307,7 @@ ReviewDate            - Thời gian đánh giá
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Mỗi khách hàng chỉ đánh giá 1 lần cho mỗi chuyến đi (QĐ15)
 - Chỉ đánh giá được chuyến đã hoàn thành
 
@@ -287,6 +316,7 @@ ReviewDate            - Thời gian đánh giá
 ### 7. NHÓM BẢNG THÔNG BÁO
 
 #### 7.1. Bảng `Notifications` - Thông báo
+
 ```
 NotificationID (PK)   - ID thông báo
 NotificationType      - Loại (Tự động, Thủ công)
@@ -300,10 +330,12 @@ SentAt                - Thời gian gửi
 ```
 
 **Quy tắc nghiệp vụ:**
+
 - Chỉ Admin được gửi thông báo thủ công (QĐ17)
 - Nội dung phải rõ ràng, đúng mã chuyến
 
 #### 7.2. Bảng `UserNotifications` - Thông báo người dùng
+
 ```
 ID (PK)               - ID
 NotificationID (FK)   - Thông báo
@@ -318,6 +350,7 @@ CreatedAt             - Thời gian tạo
 ### 8. NHÓM BẢNG CHI PHÍ VÀ BÁO CÁO
 
 #### 8.1. Bảng `OperatingCosts` - Chi phí vận hành
+
 ```
 CostID (PK)           - ID chi phí
 CostType              - Loại chi phí (Xăng dầu, Bảo trì, Bảo hiểm, Lương, Khác)
@@ -332,6 +365,7 @@ CreatedAt             - Thời gian tạo
 ```
 
 #### 8.2. Bảng `Cargo` - Hàng hóa vận chuyển
+
 ```
 CargoID (PK)          - ID hàng hóa
 BookingID (FK)        - Đơn đặt (có thể NULL)
@@ -349,6 +383,7 @@ CreatedAt             - Thời gian tạo
 ### 9. NHÓM BẢNG AUDIT LOG
 
 #### 9.1. Bảng `AuditLogs` - Nhật ký hệ thống
+
 ```
 LogID (PK)            - ID log
 UserID (FK)           - Người thực hiện
@@ -366,12 +401,15 @@ CreatedAt             - Thời gian tạo
 ## 🔍 VIEWS (Các truy vấn có sẵn)
 
 ### 1. `vw_TripDetails` - Chi tiết chuyến xe
+
 Hiển thị thông tin đầy đủ về chuyến xe bao gồm lộ trình, xe, tài xế, ghế trống
 
 ### 2. `vw_DailyRevenue` - Thống kê doanh thu theo ngày
+
 Tổng hợp doanh thu, số booking, số vé theo ngày
 
 ### 3. `vw_PassengerManifest` - Danh sách hành khách
+
 Hiển thị danh sách hành khách theo chuyến xe
 
 ---
@@ -379,30 +417,37 @@ Hiển thị danh sách hành khách theo chuyến xe
 ## ⚙️ STORED PROCEDURES
 
 ### 1. `sp_GenerateSeatsForTrip(p_TripID)`
+
 Tự động tạo ghế cho chuyến xe dựa trên loại xe
 
 **Cách sử dụng:**
+
 ```sql
 CALL sp_GenerateSeatsForTrip(1);
 ```
 
 ### 2. `sp_CancelTicket(p_BookingID, p_RefundReason)`
+
 Hủy vé và xử lý hoàn tiền theo quy định
 
 **Cách sử dụng:**
+
 ```sql
 CALL sp_CancelTicket(123, 'Khách hàng có việc đột xuất');
 ```
 
 **Quy tắc:**
+
 - Phải hủy trước giờ khởi hành tối thiểu 2 giờ
 - Hoàn 90% nếu hủy trước 4 giờ
 - Hoàn 50% nếu hủy trong khoảng 2-4 giờ
 
 ### 3. `sp_ReleaseExpiredSeats()`
+
 Tự động giải phóng ghế hết hạn giữ chỗ (chạy định kỳ)
 
 **Cách sử dụng:**
+
 ```sql
 CALL sp_ReleaseExpiredSeats();
 ```
@@ -412,15 +457,19 @@ CALL sp_ReleaseExpiredSeats();
 ## 🔔 TRIGGERS
 
 ### 1. `trg_GenerateBookingCode`
+
 Tự động tạo mã booking khi insert (format: BK20231201XXXXX)
 
 ### 2. `trg_GenerateTicketCode`
+
 Tự động tạo mã vé khi insert (format: TK20231201XXXXX)
 
 ### 3. `trg_UpdateSeatStatus`
+
 Tự động cập nhật trạng thái ghế thành "Đã đặt" khi tạo vé
 
 ### 4. `trg_AuditUserChanges`
+
 Tự động ghi log khi thông tin user thay đổi
 
 ---
@@ -461,6 +510,7 @@ idx_user_notifications    ON UserNotifications(UserID, IsRead)
 ## 📊 CÁC TRUY VẤN MẪU
 
 ### Tìm chuyến xe
+
 ```sql
 SELECT * FROM vw_TripDetails
 WHERE Origin LIKE '%Hà Nội%'
@@ -471,8 +521,9 @@ AND AvailableSeats > 0;
 ```
 
 ### Thống kê doanh thu tháng
+
 ```sql
-SELECT 
+SELECT
     DATE_FORMAT(RevenueDate, '%Y-%m') AS Month,
     SUM(TotalRevenue) AS MonthlyRevenue,
     SUM(TotalTickets) AS TotalTickets
@@ -482,8 +533,9 @@ GROUP BY DATE_FORMAT(RevenueDate, '%Y-%m');
 ```
 
 ### Danh sách vé của khách hàng
+
 ```sql
-SELECT 
+SELECT
     b.BookingCode,
     b.CustomerName,
     t.TicketCode,
@@ -501,8 +553,9 @@ ORDER BY tr.DepartureTime DESC;
 ```
 
 ### Top 5 tuyến đường doanh thu cao nhất
+
 ```sql
-SELECT 
+SELECT
     r.RouteName,
     COUNT(DISTINCT t.TripID) AS TotalTrips,
     COUNT(DISTINCT tk.TicketID) AS TotalTickets,
@@ -523,31 +576,62 @@ LIMIT 5;
 ## 🚀 HƯỚNG DẪN SỬ DỤNG
 
 ### Bước 1: Tạo Database
+
 ```bash
-mysql -u root -p < create_database.sql
+# Sử dụng psql để chạy script
+psql -U postgres -f create_database_postgresql.sql
 ```
 
-### Bước 2: Kiểm tra cấu trúc
+Hoặc:
+
+```bash
+# Đăng nhập vào PostgreSQL và chạy script
+psql -U postgres
+\i create_database_postgresql.sql
+```
+
+### Bước 2: Kết nối đến database và kiểm tra cấu trúc
+
 ```sql
-USE BusTicketManagement;
-SHOW TABLES;
+-- Kết nối đến database
+\c busticketsystem;
+
+-- Xem danh sách bảng
+\dt
+
+-- Xem chi tiết cấu trúc bảng
+\d+ users
+\d+ trips
 ```
 
 ### Bước 3: Thêm dữ liệu mẫu
+
 Dữ liệu mẫu đã có trong script (Roles, VehicleTypes, Admin)
 
 ### Bước 4: Chạy stored procedure tạo ghế
+
 ```sql
 -- Giả sử TripID = 1 đã tồn tại
 CALL sp_GenerateSeatsForTrip(1);
 ```
 
-### Bước 5: Thiết lập cron job giải phóng ghế
+### Bước 5: Thiết lập scheduled job giải phóng ghế
+
+PostgreSQL sử dụng pg_cron extension:
+
 ```sql
--- Chạy mỗi phút để giải phóng ghế hết hạn
-CREATE EVENT ReleaseExpiredSeats
-ON SCHEDULE EVERY 1 MINUTE
-DO CALL sp_ReleaseExpiredSeats();
+-- Cài đặt pg_cron extension (chỉ chạy 1 lần)
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
+-- Thiết lập job chạy mỗi phút để giải phóng ghế hết hạn
+SELECT cron.schedule('release-expired-seats', '* * * * *',
+    'CALL sp_ReleaseExpiredSeats();');
+
+-- Xem danh sách jobs
+SELECT * FROM cron.job;
+
+-- Xóa job nếu cần
+-- SELECT cron.unschedule('release-expired-seats');
 ```
 
 ---
