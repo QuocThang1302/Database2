@@ -4,10 +4,10 @@
 -- =============================================
 
 -- Tạo database
-CREATE DATABASE BusTicketManagement;
+--CREATE DATABASE BusTicketManagement;
 
--- Kết nối vào database
-\c BusTicketManagement;
+-- -- Kết nối vào database
+-- \c BusTicketManagement;
 
 -- Tạo extension UUID (nếu cần)
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -672,9 +672,9 @@ SELECT
     r.Distance,
     v.LicensePlate,
     vt.TypeName AS VehicleType,
-    vt.TotalSeats,
+    vt.TotalSeats AS VehicleCapacity,  -- ĐỔI TÊN ĐỂ TRÁNH TRÙNG
     u.FullName AS DriverName,
-    COUNT(DISTINCT ts.SeatID) AS TotalSeats,
+    COUNT(DISTINCT ts.SeatID) AS TotalSeatsCreated,  -- Tổng ghế đã tạo
     COUNT(DISTINCT CASE WHEN ts.Status = 'Trống' THEN ts.SeatID END) AS AvailableSeats
 FROM Trips t
 JOIN Routes r ON t.RouteID = r.RouteID
@@ -1080,5 +1080,3 @@ CREATE TRIGGER trg_update_trip_full_status
 -- =============================================
 -- KẾT THÚC SCRIPT
 -- =============================================
-
-SELECT 'Database PostgreSQL đã được tạo thành công!' AS Status;
